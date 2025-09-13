@@ -13,6 +13,7 @@ BRAVE_TOKEN = st.secrets.get("BRAVE_TOKEN", "")
 OPENAI_KEY = st.secrets.get("OPENAI_API_KEY", "")
 
 client = OpenAI(api_key=OPENAI_KEY)
+client_images = OpenAI(api_key=OPENAI_KEY_IMAGES)
 
 
 #########################################################################################################################
@@ -113,7 +114,7 @@ Formato:
 
 def generar_imagen_dalle(prompt_img: str):
     try:
-        response = client.images.generate(
+        response = client_images.images.generate(
             model="gpt-image-1",   # Modelo de DALL·E 3
             prompt=prompt_img,
             size="1024x1024"
