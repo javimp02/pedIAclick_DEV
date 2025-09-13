@@ -13,7 +13,7 @@ BRAVE_TOKEN = st.secrets.get("BRAVE_TOKEN", "")
 OPENAI_KEY = st.secrets.get("OPENAI_API_KEY", "")
 OPENAI_KEY_IMAGES = st.secrets.get("OPENAI_API_KEY_IMAGES ", "")
 
-st.write(f'clave: {OPENAI_KEY[:5]}')
+st.write(f'clave: {OPENAI_KEY_IMAGES[:5]}')
 
 client = OpenAI(api_key=OPENAI_KEY)
 client_images = OpenAI(api_key=OPENAI_KEY_IMAGES)
