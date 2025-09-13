@@ -11,7 +11,7 @@ from openai import OpenAI
 #########################################################################################################################
 BRAVE_TOKEN = st.secrets.get("BRAVE_TOKEN", "")
 OPENAI_KEY = st.secrets.get("OPENAI_API_KEY", "")
-OPENAI_KEY_IMAGES = st.secrets.get("OPENAI_API_KEY_IMAGES ", "")
+OPENAI_KEY_IMAGES = st.secrets.get("OPENAI_API_KEY_IMAGES", "")
 
 st.write(f'clave: {OPENAI_KEY_IMAGES[:5]}')
 
