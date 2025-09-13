@@ -88,7 +88,7 @@ Objetivo:
 A partir del siguiente post, crea un prompt visual para generar una imagen que lo acompañe en redes sociales.
 
 Post:
-{text_post}
+{texto_post}
 
 Instrucciones para el prompt:
 - Representar a los personajes **SuperVita (superhéroe de Playmobil)** y **Pediatra Chus (pediatra de Playmobil)**.
@@ -153,5 +153,10 @@ if st.session_state.post_generado:
                 prompt_img = generar_prompt_imagen(st.session_state.post_generado)
                 st.subheader("🎯 Prompt para generar la imagen:")
                 st.code(prompt_img, language="markdown")
+
+                # Post desplegable
+                with st.expander("📖 Ver texto completo del post"):
+                    st.write(st.session_state.post_generado)
+
             except Exception as e:
                 st.error(f"⚠️ Error al generar el prompt de imagen: {e}")
