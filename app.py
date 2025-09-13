@@ -111,6 +111,20 @@ Formato:
     return response.choices[0].message.content
 
 
+def generar_imagen_dalle(prompt_img: str):
+    try:
+        response = client.images.generate(
+            model="gpt-image-1",   # Modelo de DALL·E 3
+            prompt=prompt_img,
+            size="1024x1024"
+        )
+        # URL de la imagen generada
+        image_url = response.data[0].url
+        return image_url
+    except Exception as e:
+        return f"⚠️ Error al generar imagen con DALL·E: {e}"
+
+
 #########################################################################################################################
 # INTERFAZ STREAMLIT
 #########################################################################################################################
@@ -145,19 +159,29 @@ if st.button("Generar post"):
             st.subheader("📌 Post generado:")
             st.write(st.session_state.post_generado)
 
-# Si ya hay post generado, mostrar botón para imagen
 if st.session_state.post_generado:
     if st.button("🎨 Generar imagen del post"):
         with st.spinner("🖼️ Creando prompt para imagen..."):
             try:
-                ruta_imagen = "assets/referencia.jpeg"  # Ajusta al path correcto
+                ruta_imagen = "assets/referencia.jpeg"  # Path a tu imagen fija
                 prompt_img = generar_prompt_imagen(st.session_state.post_generado, ruta_imagen)
-                st.subheader("🎯 Prompt para generar la imagen:")
+                
+                st.subheader("🎯 Prompt generado para la imagen:")
                 st.code(prompt_img, language="markdown")
-    
+
+                # Generar la imagen con DALL·E
+                with st.spinner("🎨 Generando imagen con DALL·E..."):
+                    image_url = generar_imagen_dalle(prompt_img)
+                    if "http" in image_url:
+                        st.image(image_url, caption="🖼️ Imagen generada por DALL·E")
+                        st.success("✅ Imagen generada con éxito")
+                    else:
+                        st.error(image_url)  # Mensaje de error
+
+                # Post desplegable
                 with st.expander("📖 Ver texto completo del post"):
                     st.write(st.session_state.post_generado)
-    
+
             except Exception as e:
                 st.error(f"⚠️ Error al generar el prompt de imagen: {e}")
 
