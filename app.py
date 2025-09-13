@@ -80,7 +80,7 @@ Formato del post:
     return response.choices[0].message.content
 
 
-def generar_prompt_imagen(texto_post: str) -> str:
+def generar_prompt_imagen(texto_post: str, imagen_ref: str) -> str:
     prompt_imagen = f"""
 Eres un diseñador de prompts para modelos generadores de imágenes.
 
@@ -92,14 +92,14 @@ Post:
 
 Instrucciones para el prompt:
 - Representar a los personajes **SuperVita (superhéroe de Playmobil)** y **Pediatra Chus (pediatra de Playmobil)**.
+- Los personajes deben ser **exactamente iguales a los de la fotografía de referencia**: misma ropa, mismos colores, misma estética Playmobil.
 - Escena en estilo ilustración realista tipo juguete Playmobil.
 - La imagen debe reflejar el mensaje principal del post de forma clara y positiva.
 - Tono: cercano, educativo y tranquilizador.
 - No inventar datos médicos.
-- Usar exactamente el mismo estilo y personajes que en estos ejemplos (concatenar referencias aquí):
-  [EjemploImagen1_URL]
-  [EjemploImagen2_URL]
-  [EjemploImagen3_URL]
+
+Referencia visual obligatoria:
+[Imagen de referencia: {imagen_ref}]
 
 Formato:
 - Prompt conciso pero descriptivo (ideal para modelos tipo DALL·E o Stable Diffusion).
@@ -150,13 +150,14 @@ if st.session_state.post_generado:
     if st.button("🎨 Generar imagen del post"):
         with st.spinner("🖼️ Creando prompt para imagen..."):
             try:
-                prompt_img = generar_prompt_imagen(st.session_state.post_generado)
+                ruta_imagen = "assets/referencia.jpeg"  # Ajusta al path correcto
+                prompt_img = generar_prompt_imagen(st.session_state.post_generado, ruta_imagen)
                 st.subheader("🎯 Prompt para generar la imagen:")
                 st.code(prompt_img, language="markdown")
-
-                # Post desplegable
+    
                 with st.expander("📖 Ver texto completo del post"):
                     st.write(st.session_state.post_generado)
-
+    
             except Exception as e:
                 st.error(f"⚠️ Error al generar el prompt de imagen: {e}")
+
