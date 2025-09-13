@@ -11,9 +11,7 @@ from openai import OpenAI
 #########################################################################################################################
 BRAVE_TOKEN = st.secrets.get("BRAVE_TOKEN", "")
 OPENAI_KEY = st.secrets.get("OPENAI_API_KEY", "")
-OPENAI_KEY_IMAGES = st.secrets.get("OPENAI_KEY_IMAGES", "")
-
-st.write(f"🔐 Clave de imágenes cargada: {OPENAI_KEY_IMAGES}...")  # Solo muestra los primeros caracteres
+OPENAI_KEY_IMAGES = st.secrets.get("OPENAI_API_KEY_IMAGES ", "")
 
 client = OpenAI(api_key=OPENAI_KEY)
 client_images = OpenAI(api_key=OPENAI_KEY_IMAGES)
