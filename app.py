@@ -85,8 +85,7 @@ Formato del post:
 
 def generar_prompt_imagen(texto_post: str, imagen_ref: str) -> str:
     prompt_imagen = f"""
-Crea una imagen para redes sociales basada en este tema: "{tema_post}"
-Debe ser simple y deben aparecer los personajes exactamente iguales a los de la imagen de referencia ({imagen_ref}).
+Crea una escena nueva basada en el tema: 'Deporte en el primer año de vida'. Asegúrate de que los personajes SuperVita y Pediatra Chus sean exactamente iguales a los de la imagen.
 """
     return prompt_imagen
 
@@ -94,11 +93,14 @@ Debe ser simple y deben aparecer los personajes exactamente iguales a los de la 
 
 def generar_imagen_dalle(prompt_img: str):
     try:
-        response = client_images.images.generate(
+        with open("assets/referencia.jpeg", "rb") as f:
+            response = client_images.images.edit(
             model="gpt-image-1",
+            image=f,
             prompt=prompt_img,
             size="1024x1024"
-        )
+            )
+            
         image_obj = response.data[0]
         if image_obj.url:
             return image_obj.url
