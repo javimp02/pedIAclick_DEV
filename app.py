@@ -4,6 +4,7 @@
 import requests
 import streamlit as st
 from openai import OpenAI
+import base64
 
 
 #########################################################################################################################
@@ -103,13 +104,9 @@ Instrucciones para el prompt:
 Referencia visual obligatoria:
 [Imagen de referencia: {imagen_ref}]
 
-
 Formato:
 - Prompt conciso pero descriptivo (ideal para modelos tipo DALL·E o Stable Diffusion).
 """
-    
-
-
     response = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[{"role": "user", "content": prompt_imagen}]
@@ -120,15 +117,21 @@ Formato:
 def generar_imagen_dalle(prompt_img: str):
     try:
         response = client_images.images.generate(
-            model="gpt-image-1",   # Modelo de DALL·E 3
+            model="gpt-image-1",
             prompt=prompt_img,
             size="1024x1024"
         )
-        return response.data[0].url
+        image_obj = response.data[0]
+        if image_obj.url:
+            return image_obj.url
+        elif image_obj.b64_json:
+            return base64.b64decode(image_obj.b64_json)
+        else:
+            st.error("⚠️ La API no devolvió URL ni imagen base64.")
+            return None
     except Exception as e:
-        st.error(f"⚠️ Error al generar la imagen: {e}")  # Mostramos el error real
+        st.error(f"⚠️ Error al generar la imagen: {e}")
         return None
-
 
 
 #########################################################################################################################
@@ -169,26 +172,23 @@ if st.session_state.post_generado:
     if st.button("🎨 Generar imagen del post"):
         with st.spinner("🖼️ Creando prompt para imagen..."):
             try:
-                ruta_imagen = "assets/referencia.jpeg"  # Path a tu imagen fija
+                ruta_imagen = "assets/referencia.jpeg"
                 prompt_img = generar_prompt_imagen(st.session_state.post_generado, ruta_imagen)
                 
                 st.subheader("🎯 Prompt generado para la imagen:")
                 st.code(prompt_img, language="markdown")
 
-                # Generar la imagen con DALL·E
                 with st.spinner("🎨 Generando imagen con DALL·E..."):
-                    image_url = generar_imagen_dalle(prompt_img)
+                    image_result = generar_imagen_dalle(prompt_img)
                 
-                    if image_url:
-                        st.image(image_url, caption="🖼️ Imagen generada por DALL·E")
+                    if image_result:
+                        st.image(image_result, caption="🖼️ Imagen generada por DALL·E")
                         st.success("✅ Imagen generada con éxito")
                     else:
                         st.error("⚠️ No se pudo generar la imagen. Verifica tu API Key y límites de facturación.")
 
-                # Post desplegable
                 with st.expander("📖 Ver texto completo del post"):
                     st.write(st.session_state.post_generado)
 
             except Exception as e:
                 st.error(f"⚠️ Error al generar el prompt de imagen: {e}")
-
