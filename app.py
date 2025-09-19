@@ -86,8 +86,7 @@ Formato del post:
 def generar_prompt_imagen(texto_post: str, imagen_ref: str) -> str:
     prompt_imagen = f"""
 Crea una imagen para redes sociales basada en este tema: "{tema_post}"
-
-- Personajes: SuperVita y Pediatra Chus, exactamente iguales a los de la imagen de referencia ({imagen_ref}).
+Debe ser simple y deben aparecer los personajes exactamente iguales a los de la imagen de referencia ({imagen_ref}).
 """
     return prompt_imagen
 
