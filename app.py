@@ -85,33 +85,23 @@ Formato del post:
 
 def generar_prompt_imagen(texto_post: str, imagen_ref: str) -> str:
     prompt_imagen = f"""
-Eres un diseñador de prompts para modelos generadores de imágenes.
+Crea una imagen para redes sociales basada en este tema: "{tema_post}"
 
-Objetivo:
-A partir del siguiente post, crea un prompt visual para generar una imagen que lo acompañe en redes sociales.
+- Personajes: SuperVita y Pediatra Chus, exactamente iguales a los de la imagen de referencia ({imagen_ref}).
+- Estilo: ilustración realista tipo Playmobil.
+- Mensaje: reflejar de forma clara y positiva el tema principal del post.
+- Tono: educativo, cercano y tranquilizador.
+- Evita inventar elementos o datos médicos.
 
-Post:
-{texto_post}
-
-Instrucciones para el prompt:
-- Representar a los personajes **SuperVita (superhéroe de Playmobil)** y **Pediatra Chus (pediatra de Playmobil)**.
-- Los personajes deben ser **exactamente iguales a los de la fotografía de referencia**: misma ropa, mismos colores, misma estética Playmobil.
-- Escena en estilo ilustración realista tipo juguete Playmobil.
-- La imagen debe reflejar el mensaje principal del post de forma clara y positiva.
-- Tono: cercano, educativo y tranquilizador.
-- No inventar datos médicos.
-
-Referencia visual obligatoria:
-[Imagen de referencia: {imagen_ref}]
-
-Formato:
-- Prompt conciso pero descriptivo (ideal para modelos tipo DALL·E o Stable Diffusion).
+Escribe un prompt conciso, listo para usar en un generador tipo DALL·E.
 """
+
     response = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[{"role": "user", "content": prompt_imagen}]
     )
     return response.choices[0].message.content
+
 
 
 def generar_imagen_dalle(prompt_img: str):
