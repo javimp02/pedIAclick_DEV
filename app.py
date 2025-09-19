@@ -88,19 +88,8 @@ def generar_prompt_imagen(texto_post: str, imagen_ref: str) -> str:
 Crea una imagen para redes sociales basada en este tema: "{tema_post}"
 
 - Personajes: SuperVita y Pediatra Chus, exactamente iguales a los de la imagen de referencia ({imagen_ref}).
-- Estilo: ilustración realista tipo Playmobil.
-- Mensaje: reflejar de forma clara y positiva el tema principal del post.
-- Tono: educativo, cercano y tranquilizador.
-- Evita inventar elementos o datos médicos.
-
-Escribe un prompt conciso, listo para usar en un generador tipo DALL·E.
 """
-
-    response = client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=[{"role": "user", "content": prompt_imagen}]
-    )
-    return response.choices[0].message.content
+    return prompt_imagen
 
 
 
@@ -164,9 +153,6 @@ if st.session_state.post_generado:
             try:
                 ruta_imagen = "assets/referencia.jpeg"
                 prompt_img = generar_prompt_imagen(st.session_state.post_generado, ruta_imagen)
-                
-                st.subheader("🎯 Prompt generado para la imagen:")
-                st.code(prompt_img, language="markdown")
 
                 with st.spinner("🎨 Generando imagen con DALL·E..."):
                     image_result = generar_imagen_dalle(prompt_img)
