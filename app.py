@@ -120,11 +120,11 @@ def generar_imagen_dalle(prompt_img: str):
             prompt=prompt_img,
             size="1024x1024"
         )
-        if not response or not hasattr(response, "data") or not response.data:
-            return None
         return response.data[0].url
     except Exception as e:
+        st.error(f"⚠️ Error al generar la imagen: {e}")  # Mostramos el error real
         return None
+
 
 
 #########################################################################################################################
