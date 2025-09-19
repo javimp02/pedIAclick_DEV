@@ -100,12 +100,13 @@ Instrucciones para el prompt:
 - Tono: cercano, educativo y tranquilizador.
 - No inventar datos médicos.
 
-Referencia visual obligatoria:
-[Imagen de referencia: {imagen_ref}]
-
 Formato:
 - Prompt conciso pero descriptivo (ideal para modelos tipo DALL·E o Stable Diffusion).
 """
+    
+# Referencia visual obligatoria:
+# [Imagen de referencia: {imagen_ref}]
+
     response = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[{"role": "user", "content": prompt_imagen}]
