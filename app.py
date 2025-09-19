@@ -120,11 +120,11 @@ def generar_imagen_dalle(prompt_img: str):
             prompt=prompt_img,
             size="1024x1024"
         )
-        # URL de la imagen generada
-        image_url = response.data[0].url
-        return image_url
+        if not response or not hasattr(response, "data") or not response.data:
+            return None
+        return response.data[0].url
     except Exception as e:
-        return f"⚠️ Error al generar imagen con DALL·E: {e}"
+        return None
 
 
 #########################################################################################################################
@@ -174,11 +174,12 @@ if st.session_state.post_generado:
                 # Generar la imagen con DALL·E
                 with st.spinner("🎨 Generando imagen con DALL·E..."):
                     image_url = generar_imagen_dalle(prompt_img)
-                    if "http" in image_url:
+                
+                    if image_url:
                         st.image(image_url, caption="🖼️ Imagen generada por DALL·E")
                         st.success("✅ Imagen generada con éxito")
                     else:
-                        st.error(image_url)  # Mensaje de error
+                        st.error("⚠️ No se pudo generar la imagen. Verifica tu API Key y límites de facturación.")
 
                 # Post desplegable
                 with st.expander("📖 Ver texto completo del post"):
