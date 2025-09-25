@@ -1,3 +1,18 @@
+import requests
+import streamlit as st
+from openai import OpenAI
+import base64
+
+
+#########################################################################################################################
+# CONFIG
+#########################################################################################################################
+
+OPENAI_KEY_IMAGES = st.secrets.get("OPENAI_API_KEY_IMAGES", "")
+
+client_images = OpenAI(api_key=OPENAI_KEY_IMAGES)
+
+
 def generar_imagen_dalle(prompt_img: str):
     try:
         with open("assets/referencia.jpeg", "rb") as f:
@@ -19,3 +34,6 @@ def generar_imagen_dalle(prompt_img: str):
     except Exception as e:
         st.error(f"⚠️ Error al generar la imagen: {e}")
         return None
+
+
+
